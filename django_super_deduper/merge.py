@@ -22,7 +22,7 @@ class MergedModelInstance(object):
         merged_model_instance = cls(primary_object, keep_old=keep_old)
 
         #logger.debug(f'Primary object {merged_model_instance.model_meta.model_name}[pk={primary_object.pk}] '
-                     f'will be merged with {len(alias_objects)} alias object(s)')
+        #             f'will be merged with {len(alias_objects)} alias object(s)')
         #logger.debug(serialize('json', [primary_object, ]))
         #logger.debug(serialize('json', alias_objects))
 
@@ -37,7 +37,7 @@ class MergedModelInstance(object):
 
         for obj in getattr(alias_object, reverse_o2m_accessor_name).all():
             #logger.debug(f'Setting o2m field {o2m_accessor_name} on {obj._meta.model.__name__}[pk={obj.pk}] '
-                         f'to {self.model_meta.model_name}[pk={self.primary_object.pk}]')
+            #             f'to {self.model_meta.model_name}[pk={self.primary_object.pk}]')
             setattr(obj, o2m_accessor_name, self.primary_object)
             obj.save()
 
@@ -50,10 +50,10 @@ class MergedModelInstance(object):
 
         for obj in getattr(alias_object, m2m_accessor_name).all():
             #logger.debug(f'Removing {obj._meta.model.__name__}[pk={obj.pk}] '
-                         f'from {self.model_meta.model_name}[pk={alias_object.pk}].{m2m_accessor_name}')
+            #             f'from {self.model_meta.model_name}[pk={alias_object.pk}].{m2m_accessor_name}')
             getattr(alias_object, m2m_accessor_name).remove(obj)
             #logger.debug(f'Adding {obj._meta.model.__name__}[pk={obj.pk}] '
-                         f'to {self.model_meta.model_name}[pk={self.primary_object.pk}].{m2m_accessor_name}')
+            #             f'to {self.model_meta.model_name}[pk={self.primary_object.pk}].{m2m_accessor_name}')
             getattr(self.primary_object, m2m_accessor_name).add(obj)
 
     def _handle_o2o_related_field(self, related_field: Field, alias_object: Model):
@@ -66,7 +66,7 @@ class MergedModelInstance(object):
             setattr(alias_object, o2o_accessor_name, None)
             alias_object.save()
             #logger.debug(f'Setting {o2o_accessor_name} on {self.model_meta.model_name}[pk={self.primary_object.pk}] '
-                         f'to {alias_o2o_object._meta.model.__name__}[pk={alias_o2o_object.pk}')
+            #             f'to {alias_o2o_object._meta.model.__name__}[pk={alias_o2o_object.pk}')
             setattr(self.primary_object, o2o_accessor_name, alias_o2o_object)
 
     def merge(self, alias_object: Model):
@@ -91,7 +91,7 @@ class MergedModelInstance(object):
             alias_value = getattr(alias_object, field.name)
 
             #logger.debug(f'Primary {field.name} has value: {primary_value}, '
-                         f'Alias {field.name} has value: {alias_value}')
+            #             f'Alias {field.name} has value: {alias_value}')
             if primary_value in field.empty_values and alias_value not in field.empty_values:
                 #logger.debug(f'Setting primary {field.name} to alias value: {alias_value}')
                 setattr(primary_object, field.name, alias_value)
